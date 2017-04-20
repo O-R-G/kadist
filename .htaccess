@@ -1,0 +1,6 @@
+# AuthUserFile /usr/home/reinfurt/.htpasswd
+# AuthGroupFile /dev/null
+# AuthName Kadist
+# AuthType Basic
+
+# require user kadist
