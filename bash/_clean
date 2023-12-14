@@ -9,26 +9,27 @@
 #    _clean-files.txt -- files with incorrect modified dates
 #    _clean-dates.txt -- corrected modified dates
 
-FILENAMES=()
+CLEAN_FILES=()
 IFS=$'\n' read -d '' -r -a IN < _clean-files.txt
 for i in ${!IN[@]}; do
-    FILENAMES[$i]=${IN[$i]}.*
+    CLEAN_FILES[$i]=${IN[$i]}.*
 done
 
-DATES=()
+CLEAN_DATES=()
 IFS=$'\n' read -d '' -r -a IN < _clean-dates.txt
 for i in ${!IN[@]}; do
-    DATES[$i]=${IN[$i]}
+    CLEAN_DATES[$i]=${IN[$i]}
 done
 
 # 1. iterate through subdirs
 #    rm files not appearing in _log.txt
-#    touch _filenames to correct date modified
+#    touch _files to correct date modified
 #    rm extension
-#    pad filenames with zeros
+#    replace with DATES[]
 #    cleanup
 
-cd out/
+cp -rp ../in ../tmp
+cd ../tmp
 for D in */; do 
     cd $D
     pwd 
@@ -41,8 +42,8 @@ for D in */; do
 
     read -p "Press return to continue ..."
 
-    for i in ${!FILENAMES[@]}; do
-        touch -t ${DATES[$i]} ${FILENAMES[$i]}
+    for i in ${!CLEAN_FILES[@]}; do
+        touch -t ${CLEAN_DATES[$i]} ${CLEAN_FILES[$i]}
     done
 
     for file in mtdbt2f4d-*.*; do
@@ -55,19 +56,24 @@ for D in */; do
 
     TYPE=${D%/}     # rm trailing slash
     rm *.$TYPE      # cleanup
-    mkdir ../$TYPE-tmp
+    mkdir ../$TYPE-tmp  
     for file in mtdbt2f4d-[0-9]*; do
         cp -p "$file" "$(printf "../$TYPE-tmp/mtdbt2f4d-%05d.$TYPE" "${file#mtdbt2f4d-}")"
     done
 
     cd ../
     rm -r $TYPE
-    cp -r -p $TYPE-tmp $TYPE
+    cp -rp $TYPE-tmp $TYPE
     rm -r $TYPE-tmp
 
     ls $TYPE/
     echo "** $TYPE done **"
 done
+
 cd ../
+rm -rf out
+cp -rp tmp out
+rm -rf tmp
+echo "** done **"
 
 exit
