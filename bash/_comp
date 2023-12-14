@@ -3,7 +3,7 @@
 # generate composite img with dates 
 # using conformed data from /out/png
 
-rm _comp.png
+rm ../_comp.png
 rm _dates.txt
 echo " "
 echo "------"
@@ -34,8 +34,8 @@ for f in ../out/png/*.png; do
     convert "$f" -resize 300x300 -gravity northwest \
     -annotate +0+0 "${DATES[$i]}" miff:-
     ((i++))
-done | montage -geometry 400x200+4+2 -tile 14x - _comp.png
+done | montage -geometry 400x200+4+2 -tile 14x - ../_comp.png
 
-open _comp.png
+open ../_comp.png
 
 exit
