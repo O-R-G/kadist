@@ -1,0 +1,73 @@
+#!/bin/bash
+
+# normalize mtdbt2f4d kadist 10-year data
+# conform to http://meta-the-difference.com/_log.txt
+# cp -p preserves file attributes date (mv doesnt work)
+# touch -t 202101152350 path/to/filename to correct date modified
+
+# 0. prep dir/* to conform to _log.txt
+#    _filenames.txt -- files with incorrect modified dates
+#    _dates.txt -- corrected modified dates
+
+FILENAMES=()
+IFS=$'\n' read -d '' -r -a IN < _filenames.txt
+for i in ${!IN[@]}; do
+    FILENAMES[$i]=${IN[$i]}.*
+done
+
+DATES=()
+IFS=$'\n' read -d '' -r -a IN < _dates.txt
+for i in ${!IN[@]}; do
+    DATES[$i]=${IN[$i]}
+done
+
+# 1. iterate through subdirs
+#    rm files not appearing in _log.txt
+#    touch _filenames to correct date modified
+#    rm extension
+#    pad filenames with zeros
+#    cleanup
+
+cd out/
+for D in */; do 
+    cd $D
+    pwd 
+
+    rm mtdbt2f4d-.*
+    rm mtdbt2f4d-0.*
+    rm mtdbt2f4d-60[6-9].*
+    rm mtdbt2f4d-61[0-9].*
+    rm mtdbt2f4d.*
+
+    read -p "Press return to continue ..."
+
+    for i in ${!FILENAMES[@]}; do
+        touch -t ${DATES[$i]} ${FILENAMES[$i]}
+    done
+
+    for file in mtdbt2f4d-*.*; do
+        cp -p -- "$file" "${file%%.*}"
+    done
+
+    for file in mtdbt2f4d-*.png; do
+        rm $file
+    done
+
+    TYPE=${D%/}     # rm trailing slash
+    rm *.$TYPE      # cleanup
+    mkdir ../$TYPE-tmp
+    for file in mtdbt2f4d-[0-9]*; do
+        cp -p "$file" "$(printf "../$TYPE-tmp/mtdbt2f4d-%05d.$TYPE" "${file#mtdbt2f4d-}")"
+    done
+
+    cd ../
+    rm -r $TYPE
+    cp -r -p $TYPE-tmp $TYPE
+    rm -r $TYPE-tmp
+
+    ls $TYPE/
+    echo "** $TYPE done **"
+done
+cd ../
+
+exit
