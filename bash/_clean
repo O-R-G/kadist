@@ -6,17 +6,17 @@
 # touch -t 202101152350 path/to/filename to correct date modified
 
 # 0. prep dir/* to conform to _log.txt
-#    _filenames.txt -- files with incorrect modified dates
-#    _dates.txt -- corrected modified dates
+#    _clean-files.txt -- files with incorrect modified dates
+#    _clean-dates.txt -- corrected modified dates
 
 FILENAMES=()
-IFS=$'\n' read -d '' -r -a IN < _filenames.txt
+IFS=$'\n' read -d '' -r -a IN < _clean-files.txt
 for i in ${!IN[@]}; do
     FILENAMES[$i]=${IN[$i]}.*
 done
 
 DATES=()
-IFS=$'\n' read -d '' -r -a IN < _dates.txt
+IFS=$'\n' read -d '' -r -a IN < _clean-dates.txt
 for i in ${!IN[@]}; do
     DATES[$i]=${IN[$i]}
 done
