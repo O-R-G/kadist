@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# generate .mp4 with file range 
+# using conformed data from /out/png
+
+# 0. collect .png filenames 
+#    populate FILES[]
+#    then use user input slice to split
+
+i=0
+FILES=()
+for file in ../out/png/*.png; do
+    FILES[$i]=$file
+    echo ${FILES[$i]}
+    ((i++))
+done 
+
+mkdir ../mp4
+cd ../out
+rm -rf tmp
+cp -rp png tmp
+
+ffmpeg -framerate 60 -pattern_type glob -i "tmp/*.png" -vcodec libx264 -vf format=yuv420p ../mp4/out.mp4
+rm -rf tmp
+open ../mp4/out.mp4
+
+exit
