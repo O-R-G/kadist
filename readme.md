@@ -6,6 +6,8 @@
 
 /out contains all original files with conformed date metadata.
 
+/comp contains various composite files assembled from the others.
+
 /bash contains utility scripts. 
 
 After cloning repository, always run _clean to conform file modified dates as git does not store this metadata (by design).
