@@ -7,21 +7,36 @@
 #    populate FILES[]
 #    then use user input slice to split
 
+# 1. choose how many files to include
+#   eventually this could be done by year 
+# or some other more programmatic setting
+# then open and ideally loop (applescript) in quicktime player
+
+#     read -p "Press return to continue ..."
+
+LIMIT=50
+
+# mkdir ../mp4
+cd ../out
+rm -rf tmp
+mkdir tmp
+# cp -rp png tmp
+
 i=0
 FILES=()
 for file in ../out/png/*.png; do
+    [[ ${i} -gt $LIMIT ]] && break
     FILES[$i]=$file
     echo ${FILES[$i]}
+    cp $file tmp/.
     ((i++))
 done 
 
-mkdir ../mp4
-cd ../out
-rm -rf tmp
-cp -rp png tmp
+echo $i
+ls tmp
 
-ffmpeg -framerate 60 -pattern_type glob -i "tmp/*.png" -vcodec libx264 -vf format=yuv420p ../mp4/out.mp4
+ffmpeg -framerate 60 -pattern_type glob -i "tmp/*.png" -vcodec libx264 -vf format=yuv420p ../comp/mp4/out-$LIMIT.mp4
 rm -rf tmp
-open ../mp4/out.mp4
+open ../comp/mp4/out-$LIMIT.mp4
 
 exit
