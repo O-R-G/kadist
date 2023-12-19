@@ -5,28 +5,30 @@
 # cp -p preserves file attributes date (mv doesnt work)
 # touch -t 202101152350 path/to/filename to correct date modified
 
-# 0. prep dir/* to conform to _log.txt
-#    _clean-files.txt -- files with incorrect modified dates
-#    _clean-dates.txt -- corrected modified dates
-
-CLEAN_FILES=()
-IFS=$'\n' read -d '' -r -a IN < _clean-files.txt
-for i in ${!IN[@]}; do
-    CLEAN_FILES[$i]=${IN[$i]}.*
-done
-
-CLEAN_DATES=()
-IFS=$'\n' read -d '' -r -a IN < _clean-dates.txt
-for i in ${!IN[@]}; do
-    CLEAN_DATES[$i]=${IN[$i]}
-done
+# 0. prep dir/* to conform to _log
+#    _dates-formatted is ISO for reference
+#    _dates is touch-required format
+#    assembled by correlating original mod dates
+#    from meta-the-difference.com to _log
 
 # 1. iterate through subdirs
 #    rm files not appearing in _log.txt
 #    touch _files to correct date modified
 #    rm extension
 #    replace with DATES[]
-#    cleanup
+
+# 2. cleanup tmp to produce
+#    out/eot
+#    out/pdf
+#    out/png
+#    out/ttf
+#    out/woff
+
+DATES=()
+IFS=$'\n' read -d '' -r -a IN < _dates.txt
+for i in ${!IN[@]}; do
+    DATES[$i]=${IN[$i]}
+done
 
 cp -rp ../in ../tmp
 cd ../tmp
@@ -42,16 +44,8 @@ for D in */; do
 
     read -p "Press return to continue ..."
 
-    for i in ${!CLEAN_FILES[@]}; do
-        touch -t ${CLEAN_DATES[$i]} ${CLEAN_FILES[$i]}
-    done
-
     for file in mtdbt2f4d-*.*; do
         cp -p -- "$file" "${file%%.*}"
-    done
-
-    for file in mtdbt2f4d-*.png; do
-        rm $file
     done
 
     TYPE=${D%/}     # rm trailing slash
@@ -61,11 +55,17 @@ for D in */; do
         cp -p "$file" "$(printf "../$TYPE-tmp/mtdbt2f4d-%05d.$TYPE" "${file#mtdbt2f4d-}")"
     done
 
+    cd ../$TYPE-tmp
+    i=0
+    for file in mtdbt2f4d-[0-9]*.*; do
+        touch -t ${DATES[$i]} $file
+        ((i++))
+    done
+
     cd ../
     rm -r $TYPE
-    cp -rp $TYPE-tmp $TYPE
+    cp -r -p $TYPE-tmp $TYPE
     rm -r $TYPE-tmp
-
     ls $TYPE/
     echo "** $TYPE done **"
 done
@@ -74,6 +74,7 @@ cd ../
 rm -rf out
 cp -rp tmp out
 rm -rf tmp
+open .
 echo "** done **"
 
 exit
