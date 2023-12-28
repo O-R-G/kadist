@@ -8,35 +8,47 @@
 #    then use user input slice to split
 
 # 1. choose how many files to include
-#   eventually this could be done by year 
-# or some other more programmatic setting
-# then open and ideally loop (applescript) in quicktime player
+#    eventually this could be done by year 
+#    or some other more programmatic setting
+#    then open and ideally loop (applescript) in quicktime player
 
-#     read -p "Press return to continue ..."
+# ** todo **
 
-LIMIT=50
+# 2. control playback display with quicktime player 
+#    set to loop
+#    minimize size of window
+#    present in a grid 
+#    or make ffmpeg montage mp4 (!)
+#    at correct speed etc with looping
+#    stamp dates on the files (see _comp)
 
-# mkdir ../mp4
+echo "Enter slice size:";
+read SLICE
+    
+rm ../comp/mp4/*
 cd ../out
 rm -rf tmp
 mkdir tmp
-# cp -rp png tmp
 
 i=0
+LIMIT=$SLICE
 FILES=()
 for file in ../out/png/*.png; do
-    [[ ${i} -gt $LIMIT ]] && break
-    FILES[$i]=$file
-    echo ${FILES[$i]}
-    cp $file tmp/.
-    ((i++))
+    if [[ ${i} -gt $LIMIT ]]; then
+        ffmpeg -framerate 60 -pattern_type glob -i "tmp/*.png" -vcodec libx264 -vf format=yuv420p ../comp/mp4/out-$LIMIT.mp4
+        ((LIMIT+=SLICE))
+        echo $LIMIT "*** SLICE ***"
+        ls tmp
+        rm tmp/*
+    else
+        FILES[$i]=$file
+        echo ${FILES[$i]}
+        cp $file tmp/.
+        ((i++))
+    fi
 done 
 
-echo $i
-ls tmp
-
-ffmpeg -framerate 60 -pattern_type glob -i "tmp/*.png" -vcodec libx264 -vf format=yuv420p ../comp/mp4/out-$LIMIT.mp4
 rm -rf tmp
-open ../comp/mp4/out-$LIMIT.mp4
+open ../comp/mp4/out-*.mp4
 
 exit
