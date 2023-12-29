@@ -5,7 +5,7 @@
 
 # 0. collect .png filenames 
 #    populate FILES[]
-#    then use user input slice to split
+#    then use user-specified SLICE to split
 
 # 1. choose how many files to include
 #    eventually this could be done by year 
@@ -48,7 +48,23 @@ for file in ../out/png/*.png; do
     fi
 done 
 
+# 2.
+
 rm -rf tmp
-open ../comp/mp4/out-*.mp4
+# open ../comp/mp4/out-*.mp4
+cd ../comp/mp4/
+for file in *.mp4; do
+    open -a "QuickTime Player" "$file"
+    sleep 1
+    osascript -e "tell application \"QuickTime Player\"
+                      activate
+                      tell document \"$file\"
+                          set looping to true
+                          set current time to 0
+                          set rate to 2
+                          play
+                      end tell
+                  end tell"
+done
 
 exit
