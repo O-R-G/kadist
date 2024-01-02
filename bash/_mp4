@@ -21,6 +21,8 @@
 #    or make ffmpeg montage mp4 (!)
 #    at correct speed etc with looping
 #    stamp dates on the files (see _comp)
+#    requires allowing terminal to control computer
+#    in System Settings > Privacy * Security > Accessibility
 
 echo "Enter slice size:";
 read SLICE
@@ -48,30 +50,14 @@ for file in ../out/png/*.png; do
     fi
 done 
 
-# 2.
+# 2.    written in concert with chaptGPT see
+#       https://chat.openai.com/share/91bd7008-7407-4f62-b02a-30bb0f635284
 
 rm -rf tmp
 # open ../comp/mp4/out-*.mp4
-cd ../comp/mp4/
-pos_x=50
-pos_y=50
-for file in *.mp4; do
-    echo "Opening file: $file"  # Print the file being opened for debugging
-    full_file_path=$(pwd)/"$file"
-    osascript -e "tell application \"QuickTime Player\"
-                        activate
-                        open POSIX file \"$full_file_path\"
-                        delay 1
-                        tell front document
-                            set looping to true
-                            set current time to 0
-                            set rate to 2
-                            play
-                        end tell
-                        set the bounds of front window to {$pos_x, $pos_y, $(($pos_x + 500)), $(($pos_y + 200))}
-                    end tell"
-    ((pos_x += 50))
-    ((pos_y += 200))
-done
+# cd ../comp/mp4/
+# for now, failing here so using standalone helper script
 
+cd ../bash
+./_open_mp4s.sh
 exit
