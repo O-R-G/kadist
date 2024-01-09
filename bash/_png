@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# generate composite img with dates 
+# using conformed data from /out/png
+
+rm ../comp/png/out.png
+rm _dates.txt
+echo " "
+echo "------"
+echo " "
+
+# 0. collect date modified for *.png
+#    using identify -format '%[date:modify]\n'
+#    _dates.txt -- corrected modified dates
+
+for i in ../out/png/*.png; do 
+    identify -format '%[date:modify]\n' "$i" >> _dates.txt; 
+done
+cat _dates.txt
+read -p "Press any key to continue . . ."
+echo "** Generating composite image -- please be patient **"
+
+# 1. create imagemagick montage
+#    using miff imagemagick multiimage format
+#    to annotate individual img with _dates.txt
+#    writes onto image but provides more control
+
+DATES=()
+IFS=$'\n' read -d '' -r -a IN < _dates.txt
+for i in ${!IN[@]}; do
+    DATES[$i]=${IN[$i]}
+done
+
+i=0
+for f in ../out/png/*.png; do
+    convert "$f" -resize 300x300 -gravity northwest \
+    -annotate +0+0 "${DATES[$i]}" miff:-
+    ((i++))
+done | montage -geometry 400x200+4+2 -tile 14x - ../comp/png/out.png
+
+echo "Done."
+open ../comp/png/out.png
+
+exit

@@ -6,8 +6,8 @@
 # touch -t 202101152350 path/to/filename to correct date modified
 
 # 0. prep dir/* to conform to _log
-#    _dates-formatted is ISO for reference
-#    _dates is touch-required format
+#    _dates is ISO for reference
+#    _dates-formatted is touch-required format
 #    assembled by correlating original mod dates
 #    from meta-the-difference.com to _log
 
@@ -25,7 +25,7 @@
 #    out/woff
 
 DATES=()
-IFS=$'\n' read -d '' -r -a IN < _dates.txt
+IFS=$'\n' read -d '' -r -a IN < _dates-formatted.txt
 for i in ${!IN[@]}; do
     DATES[$i]=${IN[$i]}
 done
