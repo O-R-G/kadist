@@ -7,6 +7,9 @@
 #    out/ttf
 #    out/woff
 
+COPYRIGHT='Dexter-Sinister...Meta-the-Difference-Between-the-2-Font...based-on-MetaFont-original-geometry-by-Donald-Knuth-and-Anthony-Phan.';
+VERSION='v1.1-2013';
+
 cd ../out/ttf
 # add .woff
 pwd
@@ -32,7 +35,7 @@ for file in mtdbt2f4d-[0-9]*; do
 
     /Applications/FontForge.app/Contents/Resources/opt/local/bin/fontforge -lang=ff -c 'Open($1); \
         SetFontNames($3,$3,$3,$5,$6,$7); \
-        Generate($2)' $FONT.$TYPE $FONT.$TYPE $FONT $FAMILY $WEIGHT 2>> log.txt
+        Generate($2)' $FONT.$TYPE $FONT.$TYPE $FONT $FAMILY $WEIGHT $COPYRIGHT $VERSION 2>> log.txt
     ((i++))
 done
 ls
