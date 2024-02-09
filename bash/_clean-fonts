@@ -1,0 +1,55 @@
+#!/bin/bash
+
+# ** notes **
+# cleanup *.ttf so that each has correct font-family and font-name (style)
+# font weight, need to also understand what is what
+# requires fontforge 2017 ___ ** full version number needed **
+
+# 0. iterate throught ttf, woff
+#    out/ttf
+#    out/woff
+
+rm -r ../out/dev
+cp -rp ../out/ttf ../out/dev
+cd ../out/dev
+pwd
+read -p "Press return to continue ..."
+
+# get all files in dir
+# for each, harvest # after - before .
+# using fontforge
+# set fontname
+# set familymame
+# set weightname
+
+i=0
+for file in mtdbt2f4d-[0-9]*; do
+    FONT=${file%.*}     # mtdbt2f-#####
+    FAMILY=${FONT%-*}   # mtdbt2f
+    WEIGHT=${FONT#*-}   # #####
+    TYPE=${file#*.}     # .ttf, .woff
+    COPYRIGHT="testing" # fill this in 
+    VERSION="1.0"       # ibid    
+    echo "----------"
+    echo $i
+    echo "----------"
+    echo $FONT
+    echo $FAMILY
+    echo $WEIGHT
+    echo $TYPE
+
+    # SetFontNames() is the fontforge cmd for manipulating names
+    # 
+    # SetFontNames(fontname[, family[, fullname[, weight[, copyright-notice[, fontversion]]]]])
+
+    /Applications/FontForge.app/Contents/Resources/opt/local/bin/fontforge -lang=ff -c 'Open($1); \
+        SetFontNames($3,$3,$3,$5,$6,$7); \
+        Generate($2)' $FONT.ttf $FONT.ttf $FONT $FAMILY $WEIGHT $COPYRIGHT $VERSION 2>> log.txt
+    ((i++))
+done
+
+ls
+# open -a "Font Book" ./*
+echo "** done **"
+
+exit
