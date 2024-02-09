@@ -9,9 +9,10 @@
 #    out/ttf
 #    out/woff
 
-rm -r ../out/dev
-cp -rp ../out/ttf ../out/dev
-cd ../out/dev
+# rm -r ../out/dev
+# cp -rp ../out/ttf ../out/dev
+# cd ../out/dev
+cd ../out/ttf
 pwd
 read -p "Press return to continue ..."
 
