@@ -7,34 +7,47 @@
 #    out/ttf
 #    out/woff
 
-COPYRIGHT='Dexter-Sinister...Meta-the-Difference-Between-the-2-Font...based-on-MetaFont-original-geometry-by-Donald-Knuth-and-Anthony-Phan.';
+COPYRIGHT="Dexter-Sinister...Meta-the-Difference-Between-the-2-Font...based-on-MetaFont-original-geometry-by-Donald-Knuth-and-Anthony-Phan.";
 VERSION='v1.1-2013';
 
-cd ../out/ttf
+# cd ../out/ttf
+# cd ../release/ttf
 # add .woff
+
+echo "Enter relative path to .ttf fonts:";
+read RELATIVE_PATH
+
+echo "Make font family? [Yy]"
+read MAKE_FAMILY
+
+cd ${RELATIVE_PATH}
 pwd
 read -p "Press return to continue ..."
 
 i=0
 for file in mtdbt2f4d-[0-9]*; do
-    FONT=${file%.*}     # mtdbt2f-#####
-    FAMILY=${FONT%-*}   # mtdbt2f
+    FILE=$file          # mtdbt2f4d-#####.ttf
+    FONT=${file%.*}     # mtdbt2f4d-#####
+    FAMILY=${FONT%-*}   # mtdbt2f4d
     WEIGHT=${FONT#*-}   # #####
     TYPE=${file#*.}     # .ttf, .woff
+    if [[ ! $MAKE_FAMILY =~ ^[Yy]$ ]]
+    then
+        FAMILY=${FONT}
+    fi
     echo "----------"
     echo $i
     echo "----------"
+    echo $FILE
     echo $FONT
     echo $FAMILY
     echo $WEIGHT
     echo $TYPE
 
     # SetFontNames() is the fontforge cmd for manipulating names
-    # 
     # SetFontNames(fontname[, family[, fullname[, weight[, copyright-notice[, fontversion]]]]])
-
     /Applications/FontForge.app/Contents/Resources/opt/local/bin/fontforge -lang=ff -c 'Open($1); \
-        SetFontNames($3,$3,$3,$5,$6,$7); \
+        SetFontNames($3,$4,$3,$5,$6,$7); \
         Generate($2)' $FONT.$TYPE $FONT.$TYPE $FONT $FAMILY $WEIGHT $COPYRIGHT $VERSION 2>> log.txt
     ((i++))
 done
