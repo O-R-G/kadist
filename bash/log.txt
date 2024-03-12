@@ -1,0 +1,20 @@
+Copyright (c) 2000-2014 by George Williams. See AUTHORS for Contributors.
+ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+ with many parts BSD <http://fontforge.org/license.html>. Please read LICENSE.
+ Based on sources from 19:05 UTC 30-Jul-2017-ML-D.
+ Based on source from git with hash: b9149c13e8f9464fc21473f1f676b36a2130775d
+Couldn't find a font file named /Users/reinfurt/kadist/bash/mtdbt2f4d-[0-9]*.mtdbt2f4d-[0-9]*
+The requested file, mtdbt2f4d-[0-9]*.mtdbt2f4d-[0-9]*, does not exist
+Open: Failed to open: mtdbt2f4d-[0-9]*.mtdbt2f4d-[0-9]*
+Called from...
+ <command-string>: line 1
+Copyright (c) 2000-2014 by George Williams. See AUTHORS for Contributors.
+ License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+ with many parts BSD <http://fontforge.org/license.html>. Please read LICENSE.
+ Based on sources from 19:05 UTC 30-Jul-2017-ML-D.
+ Based on source from git with hash: b9149c13e8f9464fc21473f1f676b36a2130775d
+Couldn't find a font file named /Users/reinfurt/kadist/bash/mtdbt2f4d-[0-9]*.mtdbt2f4d-[0-9]*
+The requested file, mtdbt2f4d-[0-9]*.mtdbt2f4d-[0-9]*, does not exist
+Open: Failed to open: mtdbt2f4d-[0-9]*.mtdbt2f4d-[0-9]*
+Called from...
+ <command-string>: line 1
