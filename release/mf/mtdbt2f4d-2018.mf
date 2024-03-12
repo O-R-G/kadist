@@ -1,0 +1,23 @@
+% Based on geometry by Anthony Phan
+% Which was based on original geometry by Donald Knuth
+% Updated and parameterized by David Reinfurt
+% Modified: July 19, 2010; January 30, 2012
+%
+% penType 0 = circle, 1 = square, 2 = razor, 3 = speck
+% curlyness 0 - 9 / 10 - 19 / > 20
+
+if unknown mtdbase: input Share/mtdbase fi
+font_identifier:="mtdrm";
+font_size 12pt#;
+
+penType:=0;
+penX:=6;
+penY:=1;
+penR:=-10;
+weight:=50;
+slant:=-0.40;
+superness:=0.50;
+curlyness:=0;
+
+input Share/mtdprmtr;
+input Share/mtddriver;
