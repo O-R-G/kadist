@@ -1,0 +1,72 @@
+#!/bin/bash
+
+# generate pngs with rendered text 
+# using fonts in /out/ttf
+# written to out/png
+
+# 0. init
+#    cleanup
+#    backup out/png
+
+cd ../out
+if [ -d "png_" ]; then
+    echo "No backup required."
+else
+    echo "Backing up ../out/png ..."
+    cp -rp png png_
+fi
+cd ../bash
+osascript -e 'tell application "System Events" to tell process "Terminal" to keystroke "k" using command down'
+sleep 0.5
+
+# 1. generate *.png 
+#    using imagemagick -draw
+#    https://dev.to/danburzo/how-to-make-png-font-samples-with-imagemagick-part-1-29p8
+
+echo "Enter text to render:";
+read TEXTSTRING
+if [ -z "$TEXTSTRING" ];
+then
+    TEXTSTRING="Maybe we will develop slower eyeballs."
+fi
+
+echo "Enter font size:";
+read FONTSIZE
+if [ -z "$FONTSIZE" ];
+then
+    FONTSIZE="48"
+fi
+
+echo "Enter canvas width:";
+read CANVAS_W
+if [ -z "$CANVAS_W" ];
+then
+    CANVAS_W="1000"
+fi
+
+echo "Enter canvas height:";
+read CANVAS_H
+if [ -z "$CANVAS_H" ];
+then
+    CANVAS_H="200"
+fi
+
+for font in ../out/ttf/*.ttf; do \
+    magick \
+      -size ${CANVAS_W}x${CANVAS_H} \
+      canvas:white \
+      -font ./$font \
+      -pointsize $FONTSIZE \
+      -gravity Center \
+      -draw "text 0,0 '$TEXTSTRING'" \
+      "$font-sample.png";
+    echo "Rendering $font-sample.png"
+done
+
+rm -rf ../out/png
+mkdir ../out/png
+cp -p ../out/ttf/*.png ../out/png
+rm ../out/ttf/*.png
+open ../out/png
+
+exit
