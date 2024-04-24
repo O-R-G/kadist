@@ -58,7 +58,7 @@ for font in ../out/ttf/*.ttf; do \
       -font ./$font \
       -pointsize $FONTSIZE \
       -gravity Center \
-      -draw "text 0,0 '$TEXTSTRING'" \
+      -draw "text 0,20 '$TEXTSTRING'" \
       "$font-sample.png";
     echo "Rendering $font-sample.png"
 done
