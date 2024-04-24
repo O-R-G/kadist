@@ -31,12 +31,22 @@ for i in ${!IN[@]}; do
     DATES[$i]=${IN[$i]}
 done
 
+# for generating octo o sprite sheet (** tmp **)
+# requires commenting out previous 4 lines
+# for (( j=0; j<=502; j++ ))
+# do
+#     DATES+=($(printf "%05d" $j))
+# done
+
+
 i=0
 for f in ../out/png/*.png; do
     convert "$f" -resize 300x300 -gravity northwest \
     -annotate +0+0 "${DATES[$i]}" miff:-
     ((i++))
 done | montage -geometry 400x200+4+2 -tile 14x - ../comp/png/out.png
+# tmp for octo sprite sheet
+# done | montage -geometry 200x200+2+2 -tile 14x - ../comp/png/out.png
 
 echo "Done."
 open ../comp/png/out.png
