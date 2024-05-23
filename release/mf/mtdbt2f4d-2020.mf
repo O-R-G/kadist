@@ -14,9 +14,9 @@ penType:=0;
 penX:=6;
 penY:=1;
 penR:=-40;
-weight:=140;
+weight:=170;
 slant:=0.20;
-superness:=0.90;
+superness:=0.70;
 curlyness:=0;
 
 input Share/mtdprmtr;
